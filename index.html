@@ -1,1 +1,155 @@
 
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест: Похідна функції</title>
+    <style>
+        :root {
+            --primary: #4a90e2;
+            --bg: #f4f7f6;
+            --text: #333;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 700px;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 { text-align: center; color: var(--primary); }
+        .question { font-weight: bold; margin-bottom: 15px; font-size: 1.1em; }
+        .options { list-style: none; padding: 0; }
+        .option {
+            background: #eee;
+            margin: 10px 0;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .option:hover { background: #ddd; }
+        .correct { background: #d4edda !important; border: 1px solid #c3e6cb; }
+        .wrong { background: #f8d7da !important; border: 1px solid #f5c6cb; }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 1.2em;
+            display: none;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📐 Тест: Похідна та її застосування</h1>
+    <div id="quiz">
+        </div>
+    <button id="submit">Перевірити результат</button>
+    <div id="result"></div>
+</div>
+
+<script>
+    const quizData = [
+        {
+            q: "Що таке похідна функції в точці з геометричної точки зору?",
+            a: ["Площа під графіком", "Кутовий коефіцієнт дотичної", "Довжина дуги"],
+            correct: 1
+        },
+        {
+            q: "Чому дорівнює похідна константи (числа)?",
+            a: ["1", "Саме число", "0"],
+            correct: 2
+        },
+        {
+            q: "Знайдіть похідну функції f(x) = x³",
+            a: ["3x²", "x²", "3x"],
+            correct: 0
+        },
+        {
+            q: "Який фізичний зміст першої похідної від шляху за часом?",
+            a: ["Прискорення", "Сила", "Миттєва швидкість"],
+            correct: 2
+        },
+        {
+            q: "Якщо f'(x) > 0 на всьому проміжку, то функція:",
+            a: ["Спадає", "Зростає", "Є сталою"],
+            correct: 1
+        }
+    ];
+
+    const quizContainer = document.getElementById('quiz');
+    const resultContainer = document.getElementById('result');
+
+    function loadQuiz() {
+        quizData.forEach((data, index) => {
+            const qDiv = document.createElement('div');
+            qDiv.innerHTML = `
+                <div class="question">${index + 1}. ${data.q}</div>
+                <ul class="options" data-index="${index}">
+                    ${data.a.map((opt, i) => `<li class="option" data-i="${i}">${opt}</li>`).join('')}
+                </ul>
+            `;
+            quizContainer.appendChild(qDiv);
+        });
+    }
+
+    quizContainer.addEventListener('click', (e) => {
+        if (e.target.classList.contains('option')) {
+            const parent = e.target.parentElement;
+            Array.from(parent.children).forEach(li => li.style.border = "none");
+            e.target.style.border = "2px solid #4a90e2";
+            parent.dataset.selected = e.target.dataset.i;
+        }
+    });
+
+    document.getElementById('submit').addEventListener('click', () => {
+        let score = 0;
+        const lists = document.querySelectorAll('.options');
+        
+        lists.forEach((list, index) => {
+            const selected = list.dataset.selected;
+            const correct = quizData[index].correct;
+            const options = list.querySelectorAll('.option');
+
+            if (selected == correct) {
+                score++;
+                options[selected].classList.add('correct');
+            } else if (selected !== undefined) {
+                options[selected].classList.add('wrong');
+                options[correct].classList.add('correct');
+            }
+        });
+
+        resultContainer.style.display = "block";
+        resultContainer.innerHTML = `Ваш результат: ${score} з ${quizData.length}`;
+    });
+
+    loadQuiz();
+</script>
+
+</body>
+</html>
