@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Тест: Похідна функції</title>
+    <title>Тест: Похідна функції (10 клас)</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -42,7 +42,7 @@
             cursor: pointer;
             padding: 12px;
             background: #f9f9f9;
-            border: 2px solid transparent; /* Додано для красивішого виділення */
+            border: 2px solid transparent;
             border-radius: 6px;
             transition: all 0.3s ease;
         }
@@ -76,7 +76,7 @@
             text-align: center;
         }
 
-        /* Нові класи для підсвічування відповідей */
+        /* Класи для підсвічування відповідей */
         .correct-answer {
             background-color: #d4edda !important;
             border-color: #28a745 !important;
@@ -128,11 +128,11 @@
             correctAnswer: "a"
         },
         {
-            question: "4. Яка похідна від функції f(x) = eˣ?",
+            question: "4. Знайдіть похідну функції f(x) = √x.",
             answers: {
-                a: "x·eˣ⁻¹",
-                b: "eˣ",
-                c: "ln(x)"
+                a: "1 / √x",
+                b: "1 / (2√x)",
+                c: "2√x"
             },
             correctAnswer: "b"
         },
@@ -183,32 +183,25 @@
         quizData.forEach((currentQuestion, questionNumber) => {
             const answerContainer = answerContainers[questionNumber];
             
-            // Знаходимо, що вибрав користувач
             const selector = `input[name=question${questionNumber}]:checked`;
             const userRadio = answerContainer.querySelector(selector);
             const userAnswer = (userRadio || {}).value;
 
-            // Знаходимо правильну кнопку та її контейнер (щоб підсвітити)
             const correctRadio = answerContainer.querySelector(`input[value=${currentQuestion.correctAnswer}]`);
             const correctLabel = correctRadio.parentElement;
 
-            // Спочатку очищаємо всі класи з попередньої перевірки (якщо користувач натискає кнопку вдруге)
             const allLabels = answerContainer.querySelectorAll('label');
             allLabels.forEach(label => {
                 label.classList.remove('correct-answer', 'wrong-answer');
             });
 
-            // Перевіряємо відповідь
             if (userAnswer === currentQuestion.correctAnswer) {
                 numCorrect++;
-                // Підсвічуємо зеленою рамкою і фоном правильну відповідь
                 correctLabel.classList.add('correct-answer');
             } else {
-                // Якщо відповідь неправильна, підсвічуємо червоним те, що вибрав користувач (якщо він взагалі щось вибрав)
                 if (userRadio) {
                     userRadio.parentElement.classList.add('wrong-answer');
                 }
-                // І обов'язково підсвічуємо зеленим правильний варіант, щоб було видно помилку
                 correctLabel.classList.add('correct-answer');
             }
         });
@@ -216,10 +209,7 @@
         resultsContainer.innerHTML = `Ви набрали ${numCorrect} з ${quizData.length} правильних відповідей!`;
     }
 
-    // Будуємо тест при завантаженні сторінки
     buildQuiz();
-
-    // Обробник події для кнопки
     submitButton.addEventListener('click', showResults);
 </script>
 
