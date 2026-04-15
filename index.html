@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -6,149 +5,183 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Тест: Похідна функції</title>
     <style>
-        :root {
-            --primary: #4a90e2;
-            --bg: #f4f7f6;
-            --text: #333;
-        }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
+            background-color: #f4f7f6;
+            color: #333;
             line-height: 1.6;
-            display: flex;
-            justify-content: center;
             padding: 20px;
         }
-        .container {
-            max-width: 700px;
-            background: white;
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
             padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        h1 { text-align: center; color: var(--primary); }
-        .question { font-weight: bold; margin-bottom: 15px; font-size: 1.1em; }
-        .options { list-style: none; padding: 0; }
-        .option {
-            background: #eee;
-            margin: 10px 0;
-            padding: 12px;
             border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
-        .option:hover { background: #ddd; }
-        .correct { background: #d4edda !important; border: 1px solid #c3e6cb; }
-        .wrong { background: #f8d7da !important; border: 1px solid #f5c6cb; }
-        #result {
-            margin-top: 20px;
-            font-weight: bold;
+        h1 {
             text-align: center;
-            font-size: 1.2em;
-            display: none;
+            color: #2c3e50;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .question h3 {
+            margin-bottom: 10px;
+            color: #34495e;
+        }
+        .answers {
+            margin-bottom: 20px;
+        }
+        .answers label {
+            display: block;
+            margin-bottom: 8px;
+            cursor: pointer;
+            padding: 10px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        .answers label:hover {
+            background: #eef2f5;
+        }
+        .answers input[type="radio"] {
+            margin-right: 10px;
         }
         button {
             display: block;
             width: 100%;
             padding: 15px;
-            background: var(--primary);
+            background-color: #3498db;
             color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 16px;
+            border-radius: 4px;
+            font-size: 18px;
             cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        #results {
             margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>📐 Тест: Похідна та її застосування</h1>
-    <div id="quiz">
-        </div>
-    <button id="submit">Перевірити результат</button>
-    <div id="result"></div>
+<div class="quiz-container">
+    <h1>Тест: Похідна функції</h1>
+    <div id="quiz"></div>
+    <button id="submit">Дізнатися результат</button>
+    <div id="results"></div>
 </div>
 
 <script>
     const quizData = [
         {
-            q: "Що таке похідна функції в точці з геометричної точки зору?",
-            a: ["Площа під графіком", "Кутовий коефіцієнт дотичної", "Довжина дуги"],
-            correct: 1
+            question: "1. Яка похідна функції y = x²?",
+            answers: {
+                a: "x",
+                b: "2x",
+                c: "x³/3"
+            },
+            correctAnswer: "b"
         },
         {
-            q: "Чому дорівнює похідна константи (числа)?",
-            a: ["1", "Саме число", "0"],
-            correct: 2
+            question: "2. Чому дорівнює похідна константи (наприклад, y = 5)?",
+            answers: {
+                a: "1",
+                b: "5",
+                c: "0"
+            },
+            correctAnswer: "c"
         },
         {
-            q: "Знайдіть похідну функції f(x) = x³",
-            a: ["3x²", "x²", "3x"],
-            correct: 0
+            question: "3. Знайдіть похідну функції f(x) = sin(x).",
+            answers: {
+                a: "cos(x)",
+                b: "-cos(x)",
+                c: "-sin(x)"
+            },
+            correctAnswer: "a"
         },
         {
-            q: "Який фізичний зміст першої похідної від шляху за часом?",
-            a: ["Прискорення", "Сила", "Миттєва швидкість"],
-            correct: 2
+            question: "4. Яка похідна від функції f(x) = eˣ?",
+            answers: {
+                a: "x·eˣ⁻¹",
+                b: "eˣ",
+                c: "ln(x)"
+            },
+            correctAnswer: "b"
         },
         {
-            q: "Якщо f'(x) > 0 на всьому проміжку, то функція:",
-            a: ["Спадає", "Зростає", "Є сталою"],
-            correct: 1
+            question: "5. Знайдіть похідну суми функцій f(x) = 3x³ - 2x.",
+            answers: {
+                a: "9x² - 2",
+                b: "3x² - 2",
+                c: "9x² - 2x"
+            },
+            correctAnswer: "a"
         }
     ];
 
     const quizContainer = document.getElementById('quiz');
-    const resultContainer = document.getElementById('result');
+    const resultsContainer = document.getElementById('results');
+    const submitButton = document.getElementById('submit');
 
-    function loadQuiz() {
-        quizData.forEach((data, index) => {
-            const qDiv = document.createElement('div');
-            qDiv.innerHTML = `
-                <div class="question">${index + 1}. ${data.q}</div>
-                <ul class="options" data-index="${index}">
-                    ${data.a.map((opt, i) => `<li class="option" data-i="${i}">${opt}</li>`).join('')}
-                </ul>
-            `;
-            quizContainer.appendChild(qDiv);
+    function buildQuiz() {
+        const output = [];
+
+        quizData.forEach((currentQuestion, questionNumber) => {
+            const answers = [];
+            for (letter in currentQuestion.answers) {
+                answers.push(
+                    `<label>
+                        <input type="radio" name="question${questionNumber}" value="${letter}">
+                        ${letter}) ${currentQuestion.answers[letter]}
+                    </label>`
+                );
+            }
+
+            output.push(
+                `<div class="question">
+                    <h3>${currentQuestion.question}</h3>
+                    <div class="answers"> ${answers.join('')} </div>
+                </div>`
+            );
         });
+
+        quizContainer.innerHTML = output.join('');
     }
 
-    quizContainer.addEventListener('click', (e) => {
-        if (e.target.classList.contains('option')) {
-            const parent = e.target.parentElement;
-            Array.from(parent.children).forEach(li => li.style.border = "none");
-            e.target.style.border = "2px solid #4a90e2";
-            parent.dataset.selected = e.target.dataset.i;
-        }
-    });
+    function showResults() {
+        const answerContainers = quizContainer.querySelectorAll('.answers');
+        let numCorrect = 0;
 
-    document.getElementById('submit').addEventListener('click', () => {
-        let score = 0;
-        const lists = document.querySelectorAll('.options');
-        
-        lists.forEach((list, index) => {
-            const selected = list.dataset.selected;
-            const correct = quizData[index].correct;
-            const options = list.querySelectorAll('.option');
+        quizData.forEach((currentQuestion, questionNumber) => {
+            const answerContainer = answerContainers[questionNumber];
+            const selector = `input[name=question${questionNumber}]:checked`;
+            const userAnswer = (answerContainer.querySelector(selector) || {}).value;
 
-            if (selected == correct) {
-                score++;
-                options[selected].classList.add('correct');
-            } else if (selected !== undefined) {
-                options[selected].classList.add('wrong');
-                options[correct].classList.add('correct');
+            if (userAnswer === currentQuestion.correctAnswer) {
+                numCorrect++;
+                answerContainers[questionNumber].style.color = 'green';
+            } else {
+                answerContainers[questionNumber].style.color = 'red';
             }
         });
 
-        resultContainer.style.display = "block";
-        resultContainer.innerHTML = `Ваш результат: ${score} з ${quizData.length}`;
-    });
+        resultsContainer.innerHTML = `Ви набрали ${numCorrect} з ${quizData.length} правильних відповідей!`;
+    }
 
-    loadQuiz();
+    buildQuiz();
+    submitButton.addEventListener('click', showResults);
 </script>
 
 </body>
